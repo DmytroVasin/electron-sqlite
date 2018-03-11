@@ -7,8 +7,29 @@
     <ul id="database">
     </ul>
     <script>
+      var file = "test.db";
+
+      const path = require('path');
+      const electron = require('electron');
+      const uData = electron.remote.app.getPath('userData');
+      const dbPath = path.join(uData, file);
+
+      var newDbPath = dbPath.split(' ').join('\ ');
+
+      var fs = require("fs");
+      var exists = fs.existsSync(dbPath);
+
+      if(!exists) {
+        console.log("Creating DB file.");
+        fs.openSync(newDbPath, "w");
+      }
+
+
+
+
+
       var sqlite3 = require('sqlite3').verbose();
-      var db = new sqlite3.Database(':memory:');
+      var db = new sqlite3.Database(dbPath);
 
       db.serialize(function() {
         db.run("CREATE TABLE lorem (info TEXT)");
